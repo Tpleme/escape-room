@@ -67,5 +67,9 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "escape_room_microcred.slnx"
+    "dotnet.defaultSolution": "escape_room_microcred.slnx",
+    "vim.handleKeys": {
+        "<C-c>": false,
+        "<C-v>": false
+    },
 }
