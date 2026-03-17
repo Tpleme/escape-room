@@ -70,6 +70,7 @@
     "dotnet.defaultSolution": "escape_room_microcred.slnx",
     "vim.handleKeys": {
         "<C-c>": false,
-        "<C-v>": false
+        "<C-v>": false,
+        "<C-x>": false
     },
 }

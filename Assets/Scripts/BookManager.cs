@@ -1,7 +1,6 @@
 using UnityEngine;
 
 public class BookManager : MonoBehaviour {
-    [Header("Configurações")]
     private int totalBooksNedded = 7;
     public string bookTag = "Books";
 

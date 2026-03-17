@@ -4,11 +4,9 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class IntroSequence : MonoBehaviour {
-    [Header("UI Elements")]
     public TextMeshProUGUI introText;
     public Image blackScreen;
     
-    [Header("Settings")]
     [TextArea(3,5)]
     public string fullMessage = "Eles deixaram-te para trás. A cabeça pesa-te, os sentidos falham, mas o instinto de sobrevivência grita mais alto. Onde quer que estejas, este não é o teu lugar.\nSai daí.";
     public float letterDelay = 0.05f;
