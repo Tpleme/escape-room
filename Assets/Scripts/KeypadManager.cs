@@ -1,73 +1,102 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
 public class KeypadManager : MonoBehaviour {
-    public TextMeshProUGUI codeText;
-    public Animator paintingAnimator;
-    public AudioSource paintingAudioSource;
-    public string correctCode = "9726";
+	public TextMeshProUGUI codeText;
+	public Animator paintingAnimator;
+	public AudioSource paintingAudioSource;
+	public AudioSource keyTypeAudioSource;
+	public AudioSource successAudioSource;
+	public AudioSource errorAudioSource;
+	public string correctCode = "9726";
 
-    string[] code = { "-", "-", "-", "-" };
+	private bool correctCodeEntered = false;
 
-    int digitsTyped = 0;
+	string[] code = { "-", "-", "-", "-" };
 
-    public void PressKey(string key) {
-        switch (key) {
-            case "clear":
-                OnClear();
-                break;
-            case "enter":
-                OnEnter();
-                break;
-            default:
-                OnDigit(key);
-                break;
-        }
-    }
+	int digitsTyped = 0;
 
-    private void OnClear() {
-        digitsTyped = 0;
-        code = new string[] { "-", "-", "-", "-" };
-        codeText.text = String.Join("", code);
-        //digit sound
-    }
+	public void PressKey(string key) {
+		Debug.Log(key);
+		if(correctCodeEntered) return;
 
-    private void OnEnter() {
-        Debug.Log(String.Join("", code) == correctCode);
-        Debug.Log(String.Join("", code));
-        Debug.Log(correctCode);
+		switch (key) {
+			case "clear":
+				OnClear();
+				break;
+			case "enter":
+				OnEnter();
+				break;
+			default:
+				OnDigit(key);
+				break;
+		}
+	}
 
-        if (String.Join("", code) == correctCode) {
+	private void OnClear() {
+		digitsTyped = 0;
+		code = new string[] { "-", "-", "-", "-" };
+		codeText.text = String.Join("", code);
 
-            if (paintingAnimator != null) {
-                paintingAnimator.SetTrigger("slide");
+		if (keyTypeAudioSource != null) {
+			keyTypeAudioSource.Play();
+		}
+	}
 
-                //success sound
+	private void OnEnter() {
+		if (String.Join("", code) == correctCode) {
+			correctCodeEntered = true;
+			codeText.text = "OK";
 
-                if (paintingAudioSource != null) {
-                    paintingAudioSource.Play();
-                }
-            }
+			if (successAudioSource != null) {
+				successAudioSource.Play();
+			}
 
-        }
-        else {
-            OnClear();
-            //error sound
-        }
-    }
+			if (paintingAnimator != null) {
+				paintingAnimator.SetTrigger("slide");
 
-    private void OnDigit(string key) {
-        if (digitsTyped >= 4) return;
+				if (paintingAudioSource != null) {
+					paintingAudioSource.Play();
+				}
+			}
 
-        code[digitsTyped] = key;
+		}
+		else {
+			if (errorAudioSource != null) {
+				errorAudioSource.Play();
+			}
 
-        digitsTyped++;
+			StartCoroutine(OnError());
+		}
+	}
 
-        codeText.text = String.Join("", code);
+	private IEnumerator OnError() {
+		codeText.text = "ERR";
 
-        //digit sound
-    }
+		yield return new WaitForSeconds(2.0f);
+
+		code = new string[] { "-", "-", "-", "-" };
+
+		codeText.text = String.Join("", code);
+
+		digitsTyped = 0;
+	}
+
+	private void OnDigit(string key) {
+		if (digitsTyped >= 4) return;
+
+		code[digitsTyped] = key;
+
+		digitsTyped++;
+
+		codeText.text = String.Join("", code);
+
+		if (keyTypeAudioSource != null) {
+			keyTypeAudioSource.Play();
+		}
+	}
 
 
 }
